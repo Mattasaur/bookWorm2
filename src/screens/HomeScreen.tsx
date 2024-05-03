@@ -7,7 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import BookArray from '../bookArray';
+import BookListLR from './Components/bookListLR';
+import Stats from './Components/stats';
 
 export default function HomeScreen({navigation}) {
   const backgroundStyle = {
@@ -35,13 +36,12 @@ export default function HomeScreen({navigation}) {
         </View>
         <View>
           {/* Stats section, will need to do research on this */}
-          <Text style={styles.sectionHeader}>Stats</Text>
-          <Text style={styles.sectionText}>12 pages read in total</Text>
-          <Text style={styles.sectionText}>8 pages read on Average</Text>
+          <Stats />
         </View>
-        <View style={styles.sectionHeader}>
+        <View>
           {/* Last read history, will need array */}
-          <BookArray />
+          <Text style={styles.sectionHeader}>Last Read History</Text>
+          <BookListLR />
         </View>
         {/* Button to add new book */}
         <Button

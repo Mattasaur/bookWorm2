@@ -10,7 +10,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import BookArray from '../bookArray';
+import BookList from './Components/bookList';
+import { BookProvider } from '../providers/bookProvider';
 
 export default function History({navigation}) {
   const backgroundStyle = {
@@ -26,7 +27,7 @@ export default function History({navigation}) {
           <Text style={styles.sectionHeader}>My Shelf</Text>
         </View>
         <View>
-          <BookArray />
+          <BookList />
         </View>
       </ScrollView>
     </SafeAreaView>

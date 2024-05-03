@@ -20,58 +20,78 @@ import {
 import {SelectList} from 'react-native-dropdown-select-list';
 import {Book, useBookContext} from '../providers/bookProvider';
 
-export const bookContext = createContext();
-
 export default function AddBook({navigation, route}): React.JSX.Element {
   const [id, setID] = useState(0);
   const [bookName, setBookName] = useState('');
   const [bookAuthor, setBookAuthor] = useState('');
   const [selected, setSelected] = useState('');
   const [pageNo, setPageNo] = useState(0);
-  const genres: string[] = [
-    'Action and adventure',
-    'Alternate history',
-    'Anthology',
-    'Children',
-    'Classic',
-    'Comic book',
-    'Coming-of-age',
-    'Crime',
-    'Drama',
-    'Fantasy',
-    'Graphic novel',
-    'Historical fiction',
-    'Romance',
-    'Horror',
-    'Science fiction',
-    'Nonfiction',
-    'Young adult',
-    'Poetry',
-    'Short story',
+  const [errors, setErrors] = useState({
+    titleError: '',
+    authorError: '',
+    genreError: '',
+    pageError: '',
+  });
+  const genres = [
+    {key: 'Action and adventure', value: 'Action and adventure'},
+    {key: 'Alternate history', value: 'Alternate history'},
+    {key: 'Anthology', value: 'Anthology'},
+    {key: 'Children', value: 'Children'},
+    {key: 'Classic', value: 'Classic'},
+    {key: 'Comic book', value: 'Comic book'},
+    {key: 'Coming-of-age', value: 'Coming-of-age'},
+    {key: 'Crime', value: 'Crime'},
+    {key: 'Drama', value: 'Drama'},
+    {key: 'Fantasy', value: 'Fantasy'},
+    {key: 'Graphic novel', value: 'Graphic novel'},
+    {key: 'Historical fiction', value: 'Historical fiction'},
+    {key: 'Romance', value: 'Romance'},
+    {key: 'Horror', value: 'Horror'},
+    {key: 'Science fiction', value: 'Science fiction'},
+    {key: 'Nonfiction', value: 'Nonfiction'},
+    {key: 'Young adult', value: 'Young adult'},
+    {key: 'Poetry', value: 'Poetry'},
+    {key: 'Short story', value: 'Short story'},
   ];
 
   const {addBook} = useBookContext();
 
   // This const will check errors in submission
-  //const validateForm = ()=>{
-  //let errors = {};
-  //if (!bookName) errors.bookName="Book Name must be entered!";
-  //setErrors(errors);
-  //return Object.keys(errors).length===0;
-  //};
+  const validateForm = () => {
+    let foundError = false;
+
+    if (bookName.length === 0) {
+      foundError = true;
+      errors.titleError = 'Book Title cannot be empty, Please enter a name!';
+    } else {
+      errors.titleError = '';
+    }
+    if (bookAuthor.length === 0) {
+      foundError = true;
+      errors.authorError =
+        'Book Author cannot be empty, Please enter an Author!';
+    } else {
+      errors.authorError = '';
+    }
+    if (selected.length === 0) {
+      foundError = true;
+      errors.genreError = 'Book Genre cannot be empty, Please enter a Genre!';
+    } else {
+      errors.genreError = '';
+    }
+    if (pageNo <= 0) {
+      foundError = true;
+      errors.pageError = 'Total Page cannot be empty, Please enter a number';
+    } else {
+      errors.pageError = '';
+    }
+    setErrors({...errors});
+    return foundError;
+  };
 
   //this const will handle submition of fields
   const handleSubmit = e => {
-    // if (validateForm()){
-    if (id < 3) {
-      setID(i => i + 1);
-      console.log(
-        'Book ' + id + ' Submitted',
-        bookName,
-        bookAuthor,
-        selected,
-        pageNo,
-      );
+    if (!validateForm()) {
       const newBook: Book = {
         id: id,
         title: bookName,
@@ -79,11 +99,8 @@ export default function AddBook({navigation, route}): React.JSX.Element {
         genre: selected,
         numberOfPages: pageNo,
       };
-
       addBook(newBook);
-    } else console.log('Max Count Reached!');
-    //setErrors({});
-    //}
+    }
   };
 
   const backgroundStyle = {
@@ -105,12 +122,14 @@ export default function AddBook({navigation, route}): React.JSX.Element {
             value={bookName}
             onChangeText={setBookName}
           />
+          {<Text style={styles.errorText}>{errors.titleError}</Text>}
           <Text>Author:</Text>
           <TextInput
             style={styles.textInput}
             value={bookAuthor}
             onChangeText={setBookAuthor}
           />
+          {<Text style={styles.errorText}>{errors.authorError}</Text>}
           <Text>Genre:</Text>
           <SelectList
             boxStyles={styles.textInput}
@@ -118,12 +137,14 @@ export default function AddBook({navigation, route}): React.JSX.Element {
             setSelected={setSelected}
             data={genres}
           />
+          {<Text style={styles.errorText}>{errors.genreError}</Text>}
           <Text>Number of Pages:</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={setPageNo}
+            onChangeText={text => setPageNo(parseInt(text))}
             keyboardType="numeric"
           />
+          {<Text style={styles.errorText}>{errors.pageError}</Text>}
         </View>
         <Button title="+" color="#784F00" onPress={e => handleSubmit(e)} />
       </ScrollView>
