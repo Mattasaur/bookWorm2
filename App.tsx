@@ -26,10 +26,10 @@ function App(): React.JSX.Element {
     <BookProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="BookWorm">
-          <Stack.Screen name="BookWorm" component={HomeScreen} />
-          <Stack.Screen name="Add Book" component={AddBook} />
-          <Stack.Screen name="History" component={History} />
-          <Stack.Screen name="Genre" component={Genre} />
+          <Stack.Screen name="BookWorm" options={{headerStyle:{backgroundColor: "#FFF7E1"}}} component={HomeScreen} />
+          <Stack.Screen name="Add Book" options={{headerStyle:{backgroundColor: "#FFF7E1"}}} component={AddBook} />
+          <Stack.Screen name="History"  options={{headerStyle:{backgroundColor: "#FFF7E1"}}} component={History} />
+          <Stack.Screen name="Genre"    options={{headerStyle:{backgroundColor: "#FFF7E1"}}} component={Genre} />
         </Stack.Navigator>
       </NavigationContainer>
     </BookProvider>
